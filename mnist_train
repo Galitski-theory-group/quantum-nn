@@ -6,6 +6,7 @@ import torch.optim as optim
 import torch.autograd as autograd
 import json
 import scipy.stats
+from torchvision import datasets, transforms
 
 a=0.5
 g=np.pi/2
@@ -136,32 +137,21 @@ def init_weights(m):
     if isinstance(m, nn.Linear):
         torch.nn.init.kaiming_normal_(m.weight,nonlinearity='linear')
 
-class myDataset(torch.utils.data.Dataset):
-    def __init__(self,data_list):
-        self.data_list=data_list
-    def __len__(self):
-        return len(self.data_list)
-    def __getitem__(self,idx):
-        return self.data_list[idx]
+train_set = datasets.MNIST('data/', train=True, download=True, 
+                            transform=transforms.Compose([
+                               transforms.ToTensor(),
+                                torch.flatten
+                             ]))
+train_set=torch.utils.data.Subset(train_set,range(0,train_size))
+train_loader = torch.utils.data.DataLoader(train_set,batch_size=batch_size_train, shuffle=True)
 
-# Not binarized MNIST
-filename_in="mnist_data_reduced.json"
-file=open(filename_in,'r')
-in_dict=json.load(file)
-train_set_in=in_dict['train_set']
-test_set_in=in_dict['test_set']
-
-for i in range(len(test_set_in)):
-    test_set_in[i]=(torch.tensor(test_set_in[i][0]),test_set_in[i][1])
-
-for i in range(len(train_set_in)):
-    train_set_in[i]=(torch.tensor(train_set_in[i][0]),train_set_in[i][1])
-
-train_dataset=myDataset(train_set_in)
-test_dataset=myDataset(test_set_in)
-
-train_loader = torch.utils.data.DataLoader(train_dataset,batch_size=batch_size_train, shuffle=True)
-test_loader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size_test, shuffle=False)
+test_set = datasets.MNIST('data/', train=False, download=True,
+                             transform=transforms.Compose([
+                               transforms.ToTensor(),
+                                 torch.flatten
+                             ]))
+test_set=torch.utils.data.Subset(test_set,range(0,test_size))
+test_loader = torch.utils.data.DataLoader(test_set, batch_size=batch_size_test, shuffle=False)
 
 def get_err(loader,model,num_shots):
     batch_err=[]
