@@ -436,7 +436,7 @@ def record(out_dict:dict,directory:str,filename:str):
     Writes contents of a dictionary to a json file
 
     Parameters:
-        out_dict (str): dictionary to write to file
+        out_dict (dict): dictionary to write to file
         directory (str)
         filename (str)
     """
