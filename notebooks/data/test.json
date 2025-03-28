@@ -1,0 +1,1 @@
+{"a": 0.5, "g": 1.5707963267948966, "num_shots": 15, "train_size": 5000, "test_size": 10000, "learning_rate": 0.01, "momentum": 0.9, "batch_size": 64, "epochs": 10, "input_size": 784, "output_size": 10, "depth": 2, "width": 10, "test_accuracy": 
