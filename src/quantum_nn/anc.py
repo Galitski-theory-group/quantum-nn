@@ -285,7 +285,7 @@ def prep_data(train_size:int,
         tuple[torch.utils.data.dataloader.DataLoader]: contains 2 dataloaders, the first for training, the second for testing
     """
     # prepare training data
-    train_set = datasets.MNIST('data/', train=True, download=True, 
+    train_set = datasets.MNIST('../../data/mnist_data', train=True, download=True, 
                             transform=transforms.Compose([
                                transforms.ToTensor(),
                                 torch.flatten
@@ -294,7 +294,7 @@ def prep_data(train_size:int,
     train_loader = torch.utils.data.DataLoader(train_set,batch_size=batch_size_train, shuffle=True)
 
     # prepare testing data
-    test_set = datasets.MNIST('data/', train=False, download=True,
+    test_set = datasets.MNIST('../../data/mnist_data', train=False, download=True,
                              transform=transforms.Compose([
                                transforms.ToTensor(),
                                  torch.flatten

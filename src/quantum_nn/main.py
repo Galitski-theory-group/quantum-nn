@@ -1,6 +1,10 @@
-import anc
+from anc import *
+from sys import argv
+# from quantum_nn import anc
+
 
 def main():
+    # Note: two arguments are passed by the system, a and g respectively.
     train_size=5000
     train_batch_size=64
     test_size=10000
@@ -8,10 +12,10 @@ def main():
 
     width=512
     depth=3
-    input_size=768
+    input_size=784
     output_size=10
-    a=0.5
-    g=np.pi/4
+    a=float(argv[1])
+    g=float(argv[2])
 
     learning_rate=0.01
     momentum=0.9
@@ -34,13 +38,13 @@ def main():
         "step": step        
     }
 
-    train_loader,test_loader=prep_data(train_size,train_batch_size,test_size,test_batch_size)
-    net=QMLP(width,depth,input_size,output_size,a=a,g=g)
-    net.apply(init_weights)
-    res_dict=train(net,train_loader,test_loader,learning_rate,momentum,num_shots,num_epochs,step)    
-    record(hp_dict|res_dict,'res_data/a'+str(a)+'_g'+str(g)+'.json')
+    train_loader,test_loader=prep_data(train_size,train_batch_size,test_size,test_batch_size) # prepare training and test data
+    net=QMLP(width,depth,input_size,output_size,a=a,g=g) # create quantum network
+    net.apply(init_weights) # apply Kaiming intialization to weights
+    res_dict=train(net,train_loader,test_loader,learning_rate,momentum,num_shots,num_epochs,step) # train the network
+    record(hp_dict|res_dict,'../../data/res_data','a'+str(a)+'_g'+str(g)+'.json') # write the data to a file
 
     print(res_dict["test_accuracy"])
 
-if __name__=='main':
+if __name__=='__main__':
     main()
